@@ -1,0 +1,89 @@
+export EDITOR="nvim"
+export NVM_DIR="$HOME/.nvm"
+
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+docker_repo_list() {
+     curl -s --insecure -X GET https://repourl.com:5000/v2/$@/tags/list
+}
+
+alias resource="source ~/.zshrc"
+alias kp='keepassxc'
+alias today='last | grep `whoami` | grep "`date +"%a %b %e"`" | cut -b 51- | sort | sed -n 1p | cut -b -5'
+alias fixterm="kill -WINCH $$"
+alias ls="ls --color=auto"
+alias l="ls --color -lh"
+alias ll="ls -lah"
+alias grep='grep --color'
+alias c="bgc && clear"
+alias untar="tar -xvzf"
+alias cd..="cd .."
+alias s="cd .."
+alias cp="cp -v"
+alias mv="mv -v"
+alias rm="rm -v"
+alias ws="cd ~/work"
+alias home="cd ~"
+alias calc='echo PerlCalc; perl -ple"\$_=eval"'
+alias diff="diff -u $*"
+alias rgrep="grep -r --color $*"
+alias branches="git for-each-ref --format='%(committerdate) %09 %(authorname) %09 %(refname)' | sort -k5n -k2M -k3n -k4n"
+
+# Docker
+alias dr="curl -s --insecure -X GET https://repourl.com:5000/v2/_catalog"
+alias drl=docker_repo_list
+alias hadolint="docker run --rm -i hadolint/hadolint < $*"
+alias drmi="for i in `docker images | grep \"<none>\" | awk '{ print $3 }'`; do docker rmi $i; done"
+alias dl="docker logs --tail 1000 $*"
+alias dlf="docker logs -f $*"
+alias dc="docker ps -a --format '{{ .Names .State.Status }}'"
+
+# Terminal Colors
+alias bgc='printf %b "\e]11;#000000\a"'
+alias bgr='printf %b "\e]11;#360000\a"'
+alias bgg='printf %b "\e]11;#063600\a"'
+alias bgy='printf %b "\e]11;#212000\a"'
+alias bgb='printf %b "\e]11;#001e36\a"'
+
+# Git
+#git alias
+git config --global alias.co checkout
+git config --global alias.ci commit
+git config --global alias.cm commit
+git config --global alias.st status
+git config --global alias.ad add
+git config --global alias.df diff
+git config --global alias.dfc "diff --cached"
+git config --global alias.br branch
+git config --global alias.lol "log --graph --decorate --pretty=oneline --abbrev-commit"
+git config --global alias.lola "log --graph --decorate --pretty=oneline --abbrev-commit --all"
+git config --global alias.subup "submodule update --init --recursive"
+git config --global alias.subst "submodule status --recursive"
+
+alias g='git'
+function ga() { git add "${@:-.}"; } # Add all files by default
+alias gp='git push'
+alias gpa='gp --all'
+alias gu='git pull'
+alias gl='git log'
+alias gs='git status'
+alias gst='gs'
+alias gd='git diff'
+alias gdc='gd --cached'
+alias gm='git commit -m'
+alias gma='git commit -am'
+alias gb='git branch'
+alias gba='git branch -a'
+function gc() { git checkout "${@:-master}"; } # Checkout master by default
+alias gco='gc'
+alias gcb='gc -b'
+alias gr='git remote'
+alias grv='gr -v'
+alias gcd='git rev-parse 2>/dev/null && cd "./$(git rev-parse --show-cdup)"'
+alias glol='git lol'
+alias glola='git lola'
+
+# Current branch or SHA if detached.
+alias gbs='git branch | perl -ne '"'"'/^\* (?:\(detached from (.*)\)|(.*))/ && print "$1$2"'"'"''
+

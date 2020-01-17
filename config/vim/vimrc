@@ -1,0 +1,165 @@
+set nocompatible
+" allow portable .vim and .vimrc location
+" set default 'runtimepath' (without ~/.vim folders)
+let &runtimepath = printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
+
+" what is the name of the directory containing this file?
+let s:portable = expand('<sfile>:p:h')
+
+" add the directory to 'runtimepath'
+let &runtimepath = printf('%s,%s,%s/after', s:portable, &runtimepath, s:portable)
+
+
+" ~/.vimrc 
+" christof luethi, shaped.ch
+"
+" LOG
+"
+" 20100507	reconfigured tabwidth. added openFile and number toggle
+"			use :tabnew to open a file as new tab, navigate with
+"			<c>-pgup/pgdown
+"
+"			use <c-w> gf to open file under cursor in new tab
+"			use gf to open file under cursor as splitted screen
+"				
+" Basic {
+    if filereadable("/etc/vim/vimrc.local")
+	source /etc/vim/vimrc.local
+    endif
+    
+    syntax on
+    " set background=dark     
+" }
+
+" function key mappings
+" map ^[OP <F1>
+" map ^[OQ <F2>
+" map ^[OR <F3>
+" map ^[OS <F4>
+" map ^[[15~ <F5>
+" map ^[[20~ <F9>
+" map ^[[23~ <F11>
+" map ^[[24~ <F12>
+" map ^[[1;5D <C-left>
+" map ^[[1;5C <C-right>
+
+" General {
+    set nocompatible	" prevent from emulating vi's bugs and limitations.
+    set t_Co=256	" allow more colors (256 - see below)
+
+    if has("autocmd")
+	filetype plugin indent on
+    endif
+    set backspace=indent,eol,start  " make backspace a more flexible
+    set wildmenu					" turn on command line completion wild style
+									" ignore these list file extensions
+    set wildignore=*.dll,*.o,*.obj,*.bak,*.exe,*.pyc,*.jpg,*.gif,*.png
+    set wildmode=list:longest		" turn on wild mode huge list
+    set noerrorbells				" don't make noise
+" }
+
+function! SyntaxItem()
+  return synIDattr(synID(line("."),col("."),1),"name")
+endfunction
+
+" VIM UI {
+    set hlsearch					" Highlight search query
+    set showcmd						" Show (partial) command in status line.
+    set showmatch					" Show matching brackets.
+    set ignorecase					" Do case insensitive matching
+    set incsearch					" Incremental search
+    set number
+    set nostartofline				" leave my cursor where it was
+    set diffopt+=iwhite				" ignore heading and trailing whitespaces on diffs
+    " set cursorcolumn				" highlight the current column
+    " set cursorline					" highlight current line
+    set statusline=%F%m%r%h%w[%L][%{&ff}][%{(&fenc==\"\"?&enc:&fenc)}]%y[%p%%][%04l,%04v,%010o]\ %{SyntaxItem()}
+    "              | | | | |  |   |      |  |     |    |
+    "              | | | | |  |   |      |  |     |    + current
+    "              | | | | |  |   |      |  |     |       column
+    "              | | | | |  |   |      |  |     +-- current line
+    "              | | | | |  |   |      |  +-- current % into file
+    "              | | | | |  |   |      +-- current syntax in
+    "              | | | | |  |   |          square brackets
+    "              | | | | |  |   +-- current fileformat
+    "              | | | | |  +-- number of lines
+    "              | | | | +-- preview flag in square brackets
+    "              | | | +-- help flag in square brackets
+    "              | | +-- readonly flag in square brackets
+    "              | +-- rodified flag in square brackets
+    "              +-- full path to file in the buffer
+    " Colorscheme wombat
+    set modeline
+    set laststatus=2 " show statusline
+" }
+
+" Text Formatting/Layout {
+    set softtabstop=4			" Set tabwith to 4
+	"    set ts=4					" Set tab to 4
+    " set shiftwidth=4			" Set tabwidth to 4
+    set smartindent
+    set autoindent
+" }
+
+" Functions {
+    function! s:DiffWithSaved()
+	let filetype=&ft
+	diffthis
+	vnew | r # | normal! 1Gdd
+	diffthis
+	exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+    endfunction
+    com! DiffSaved call s:DiffWithSaved()
+" }
+
+" Code Completion with Tab {
+    set iskeyword+=:
+    inoremap <F8> <c-r>=InsertTabWrapper()<cr>
+    "highlight PMenu      cterm=bold ctermbg=DarkGray ctermfg=Red
+    "highlight PMenuSel   cterm=bold ctermbg=Yellow ctermfg=Black
+    "highlight PMenuSbar  cterm=bold ctermbg=DarkGreen
+    "highlight PMenuThumb cterm=bold ctermbg=Yellow
+    "ctermfg=231
+    highlight PMenu      cterm=bold ctermbg=230 ctermfg=Black
+    highlight PMenuSel   cterm=bold ctermbg=214 ctermfg=Black
+    highlight PMenuSbar  cterm=bold ctermbg=221
+    highlight PMenuThumb cterm=bold ctermbg=208
+
+    function! InsertTabWrapper()
+	let col = col('.') - 1
+	if !col || getline('.')[col - 1] !~ '\k'
+	    return "\<F8>"
+	else
+	    return "\<c-p>"
+	endif
+    endfunction
+" }
+
+" past toggle {
+    nnoremap <F2> :set invpaste paste?<CR>
+    set pastetoggle=<F2>
+    set showmode
+" }
+
+" openFileUnderCursor {
+    map <F3> :wincmd gf<CR>
+" }
+ 
+" number toggle {
+    map <F4> :set invnumber<CR>
+" }
+"
+" open directory in tab {
+    map <F5> :tabnew ./<CR>
+" }
+"
+" toggle line number wraping {
+    map <F6> :set invwrap<CR>
+" }
+"
+noremap % v%
+map <C-PageUp> :tabp<CR>
+map <C-PageDown> :tabn<CR>
+map <CTRL-V><CTRL-PAGEUP> :tabp<CR>
+map <CTRL-V><CTRL-PAGEDOWN> :tabn<CR>
+

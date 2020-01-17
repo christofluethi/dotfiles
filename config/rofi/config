@@ -1,0 +1,24 @@
+! ------------------------------------------------------------------------------
+! ROFI Color theme - CLU Custom
+! ------------------------------------------------------------------------------
+rofi.color-enabled: true
+! Window: ‘background’, ‘border’, ‘separator’
+rofi.color-window: #393939, #268bd2, #268bd2
+! State: ‘bg’, ‘fg’, ‘altbg’, ‘hlbg’, hlfg
+rofi.color-normal: #393939, #ffffff, #393939, #268bd2, #ffffff
+rofi.color-active: #393939, #268bd2, #393939, #268bd2, #205171
+rofi.color-urgent: #393939, #f3843d, #393939, #268bd2, #ffc39c
+rofi.modi: window,run,ssh,drun
+rofi.width: 70
+rofi.padding: 20
+rofi.opacity: 80
+rofi.border: 22x
+rofi.line-margin: 5
+rofi.lines: 20
+rofi.separator-style: solid
+rofi.columns: 1
+rofi.font: Coda Bold 11
+rofi.bw: 4
+rofi.eh: 1
+rofi.hide-scrollbar: false
+rofi.auto-select: false
