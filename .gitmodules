@@ -52,3 +52,6 @@
 [submodule "config/vim/bundle/vim-rake"]
 	path = config/vim/bundle/vim-rake
 	url = https://github.com/tpope/vim-rake.git
+[submodule "vendor/git-extras"]
+	path = vendor/git-extras
+	url = https://github.com/visionmedia/git-extras.git
