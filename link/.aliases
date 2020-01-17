@@ -29,6 +29,7 @@ alias calc='echo PerlCalc; perl -ple"\$_=eval"'
 alias diff="diff -u $*"
 alias rgrep="grep -r --color $*"
 alias branches="git for-each-ref --format='%(committerdate) %09 %(authorname) %09 %(refname)' | sort -k5n -k2M -k3n -k4n"
+alias vi="nvim"
 
 # Docker
 alias dr="curl -s --insecure -X GET https://repourl.com:5000/v2/_catalog"
