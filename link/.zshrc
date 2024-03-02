@@ -129,5 +129,5 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 # Add Jbang to environment
 alias j!=jbang
 export M2_HOME=/opt/maven
-#export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-export PATH="$HOME/.jbang/bin:/opt/crc/:/opt/minikube/:${M2_HOME}/bin:$PATH"
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+export PATH="$HOME/.jbang/bin:${HOME}/bin:${M2_HOME}/bin:$PATH"

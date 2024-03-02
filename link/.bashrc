@@ -1,5 +1,6 @@
 # Where the magic happens.
 export DOTFILES=~/.dotfiles
+JAVA_HOME=/usr/lib/jvm/java-21-openjdk
 
 # Add binaries into the path
 PATH=$DOTFILES/bin:$PATH
