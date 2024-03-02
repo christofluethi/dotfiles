@@ -1,6 +1,5 @@
 # Where the magic happens.
 export DOTFILES=~/.dotfiles
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 # Add binaries into the path
 PATH=$DOTFILES/bin:$PATH
@@ -73,3 +72,7 @@ src
 unset INIT_DIR
 export HOME=$HOME_DIR
 cd $HOME_DIR
+
+# Add Jbang to environment
+alias j!=jbang
+export PATH="$HOME/.jbang/bin:$PATH"

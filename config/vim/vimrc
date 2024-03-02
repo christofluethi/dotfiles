@@ -163,3 +163,5 @@ map <C-PageDown> :tabn<CR>
 map <CTRL-V><CTRL-PAGEUP> :tabp<CR>
 map <CTRL-V><CTRL-PAGEDOWN> :tabn<CR>
 
+set mouse-=a
+

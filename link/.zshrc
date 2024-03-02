@@ -111,21 +111,10 @@ source $ZSH/oh-my-zsh.sh
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
 
-# append to the history file, don't overwrite it
-shopt -s histappend
-
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 export HISTSIZE=999999999
 export SAVEHIST=$HISTSIZE
 export HISTFILESIZE=2500
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
 
 # Base16 Shell
 BASE16_SHELL="$HOME/.config/base16-shell/"
@@ -136,3 +125,9 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 # aliases
 [ -f ~/.aliases ] && source ~/.aliases
 [ -f ~/.aliases.local ] && source ~/.aliases.local
+
+# Add Jbang to environment
+alias j!=jbang
+export M2_HOME=/opt/maven
+#export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export PATH="$HOME/.jbang/bin:/opt/crc/:/opt/minikube/:${M2_HOME}/bin:$PATH"

@@ -4,10 +4,93 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-docker_repo_list() {
-     curl -s --insecure -X GET https://repourl.com:5000/v2/$@/tags/list
+# ------------------------------------------
+# Worktime calculation
+# ------------------------------------------
+function worktime() {
+    BREAK="$(( ${1-0} * 60))"
+    UP=`cat /proc/uptime | sed 's/\..*//'`
+    WORKTIME=$(( $UP - $BREAK ))
+
+    WHO=`who -b | awk '{ print $4" ("$3")" }'`
+    printf "%-15s %31s\n" "System Boot" "$WHO"
+    printf "%-15s %40s\n" "System Uptime" "`displaytime $UP`"
+    printf "%-15s %40s\n" "Break" "`displaytime $BREAK`"
+    printf "%-15s %40s\n" "Worktime" "`displaytime $WORKTIME`"
 }
 
+function timecalc() {
+  local INARG=$1
+  local OUTARG=$2
+  local BREAK=$3
+  local SHORT=$4
+
+  if [ "$INARG" = "0" ]; then
+ 	  INARG=`who -b | awk '{ print $4 }'`
+  fi
+  local IN=$(date +'%H:%M' -d $INARG)
+
+  if [ -z "$OUTARG" ] || [ "$OUTARG" = "-" ] || [ "$OUTARG" = "0" ]; then
+ 	  OUTARG=$(date +'%H:%M')
+  fi
+  local OUT=$(date +'%H:%M' -d $OUTARG)
+
+  if [ -z "$BREAK" ]; then
+	  local BREAK=0
+  fi
+
+  if [ -z "$SHORT" ] || [ "$SHORT" != "short" ]; then
+	SHORT="normal"
+  fi
+
+  if [ "$SHORT" = "normal" ]; then
+	echo "Work Start:\t$IN"
+	echo "Work End:\t$OUT"
+	echo "Break:\t\t$BREAK min"
+  else
+	echo -n "`date +'%F %H:%M:%S'`\t$IN $OUT ($BREAK)\t"
+  fi
+
+  local TS_START="$(date +'%m-%d-%Y')@:$IN:00"    
+  local TS_END="$(date +'%m-%d-%Y')@:$OUT:00"
+  local seconds=$(( ($(date2sec "$TS_END") - $(date2sec "$TS_START")) ))
+  bseconds=$(( BREAK * 60 ))
+  local workseconds=$(expr $seconds - $bseconds)
+  displaytime $workseconds
+}
+
+function date2sec { 
+  date -d "$(sed 's|-|/|g; s|@| |; s|:| |' <<<"$*")" +%s; 
+}
+
+function displaytime {
+  local T=$1
+  local D=$((T/60/60/24))
+  local H=$((T/60/60%24))
+  local M=$((T/60%60))
+  local S=$((T%60))
+  local DEC=$(( H + (M/60.0) ))
+  (( $D > 0 )) && printf '%02d days ' $D
+  (( $H > 0 )) && printf '%02d hours ' $H
+  (( $M > 0 )) && printf '%02d min ' $M
+  (( $D > 0 || $H > 0 || $M > 0 )) && printf 'and '
+  printf '%02d sec\t' $S && printf '(%.2f h)\n' $DEC
+}
+# ------------------------------------------
+# END Worktime calculation
+# ------------------------------------------
+
+
+docker_repo_list() {
+     curl -s --insecure -X GET https://${DOCKER_REPO_URL}/v2/$@/tags/list
+}
+
+swagger_ui() {
+     docker run --rm -p 8081:8080 -e SWAGGER_JSON=/swagger.json -v $(pwd)/swagger.json:/swagger.json swaggerapi/swagger-ui
+}
+
+#alias wcalc="timecalc $1 $2 $3"
+alias wtc="worktime-calculator"
 alias resource="source ~/.zshrc"
 alias kp='keepassxc'
 alias today='last | grep `whoami` | grep "`date +"%a %b %e"`" | cut -b 51- | sort | sed -n 1p | cut -b -5'
@@ -30,9 +113,11 @@ alias diff="diff -u $*"
 alias rgrep="grep -r --color $*"
 alias branches="git for-each-ref --format='%(committerdate) %09 %(authorname) %09 %(refname)' | sort -k5n -k2M -k3n -k4n"
 alias vi="nvim"
+alias pgadmin="docker run -e PGADMIN_DEFAULT_EMAIL=admin -e PGADMIN_DEFAULT_PASSWORD=admin --net=host dpage/pgadmin4"
+alias wtime="worktime $1"
 
 # Docker
-alias dr="curl -s --insecure -X GET https://repourl.com:5000/v2/_catalog"
+alias dr="curl -s --insecure -X GET https://${DOCKER_REPO_URL}/v2/_catalog"
 alias drl=docker_repo_list
 alias hadolint="docker run --rm -i hadolint/hadolint < $*"
 alias drmi="for i in `docker images | grep \"<none>\" | awk '{ print $3 }'`; do docker rmi $i; done"
@@ -88,3 +173,16 @@ alias glola='git lola'
 # Current branch or SHA if detached.
 alias gbs='git branch | perl -ne '"'"'/^\* (?:\(detached from (.*)\)|(.*))/ && print "$1$2"'"'"''
 
+# Bluetooth
+alias bthoff="sudo /etc/init.d/bluetooth stop && rfkill block bluetooth"
+alias bthon="rfkill unblock bluetooth && sudo /etc/init.d/bluetooth restart"
+
+# UUID
+alias uuid="cat /proc/sys/kernel/random/uuid"
+
+# Strimzi
+alias sco="oc logs -n openshift-operators --selector name=strimzi-cluster-operator"
+alias seo="oc logs --selector name=sandbox-entity-operator"
+
+# Swagger
+alias swaggerui=swagger_ui
