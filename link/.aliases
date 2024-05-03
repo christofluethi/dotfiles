@@ -85,14 +85,10 @@ docker_repo_list() {
      curl -s --insecure -X GET https://${DOCKER_REPO_URL}/v2/$@/tags/list
 }
 
-swagger_ui() {
-     docker run --rm -p 8081:8080 -e SWAGGER_JSON=/swagger.json -v $(pwd)/swagger.json:/swagger.json swaggerapi/swagger-ui
-}
-
 #alias wcalc="timecalc $1 $2 $3"
 alias wtc="worktime-calculator"
 alias resource="source ~/.zshrc"
-alias kp='keepassxc'
+alias kpxc='keepassxc'
 alias today='last | grep `whoami` | grep "`date +"%a %b %e"`" | cut -b 51- | sort | sed -n 1p | cut -b -5'
 alias fixterm="kill -WINCH $$"
 alias ls="ls --color=auto"
@@ -131,6 +127,7 @@ alias bgr='printf %b "\e]11;#360000\a"'
 alias bgg='printf %b "\e]11;#063600\a"'
 alias bgy='printf %b "\e]11;#212000\a"'
 alias bgb='printf %b "\e]11;#001e36\a"'
+alias c="bgc && clear"
 
 # Git
 #git alias
@@ -170,6 +167,24 @@ alias gcd='git rev-parse 2>/dev/null && cd "./$(git rev-parse --show-cdup)"'
 alias glol='git lol'
 alias glola='git lola'
 
+# kubectl
+alias k="kubectl"
+alias kctl="kubectl"
+alias kp="kgp"
+alias kx="kubectl exec -it $1 $2"
+alias kxb="kubectl exec -it"
+alias kgp="kubectl get pod"
+alias kg="kubectl get"
+alias kl="kubectl logs"
+alias klo="kubectl logs -f"
+alias kgd="kubectl get deployment"
+alias kns="kubectl get ns"
+alias kctx="kubectl config get-contexts"
+alias ksctx-minikube="kubectl config set-context --current --cluster=minikube --namespace=default"
+alias ksns="kubectl config set-context --current --namespace $1"
+alias krr="kubectl rollout restart $1 $2"
+alias kge="kubectl get events"
+
 # Current branch or SHA if detached.
 alias gbs='git branch | perl -ne '"'"'/^\* (?:\(detached from (.*)\)|(.*))/ && print "$1$2"'"'"''
 
@@ -184,5 +199,3 @@ alias uuid="cat /proc/sys/kernel/random/uuid"
 alias sco="oc logs -n openshift-operators --selector name=strimzi-cluster-operator"
 alias seo="oc logs --selector name=sandbox-entity-operator"
 
-# Swagger
-alias swaggerui=swagger_ui
