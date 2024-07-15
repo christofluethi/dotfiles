@@ -167,9 +167,16 @@ alias gcd='git rev-parse 2>/dev/null && cd "./$(git rev-parse --show-cdup)"'
 alias glol='git lol'
 alias glola='git lola'
 
+# quarkus
+alias q="quarkus"
+
 # kubectl
 alias k="kubectl"
 alias kctl="kubectl"
+alias ka="kap"
+alias kap="kubectl apply -f"
+alias kgd="kubectl get deployment"
+alias kgsvc="kubectl get service"
 alias kp="kgp"
 alias kx="kubectl exec -it $1 $2"
 alias kxb="kubectl exec -it"
@@ -182,8 +189,10 @@ alias kns="kubectl get ns"
 alias kctx="kubectl config get-contexts"
 alias ksctx-minikube="kubectl config set-context --current --cluster=minikube --namespace=default"
 alias ksns="kubectl config set-context --current --namespace $1"
+alias ksecdec='echo kubectl get secret <secret> -o jsonpath="{<ex: .data.admin-password>}" | base64 --decode; echo'
 alias krr="kubectl rollout restart $1 $2"
 alias kge="kubectl get events"
+alias mdl='markdownlint-cli2 "**/*.md" "#node_modules"'
 
 # Current branch or SHA if detached.
 alias gbs='git branch | perl -ne '"'"'/^\* (?:\(detached from (.*)\)|(.*))/ && print "$1$2"'"'"''
@@ -196,6 +205,6 @@ alias bthon="rfkill unblock bluetooth && sudo /etc/init.d/bluetooth restart"
 alias uuid="cat /proc/sys/kernel/random/uuid"
 
 # Strimzi
-alias sco="oc logs -n openshift-operators --selector name=strimzi-cluster-operator"
-alias seo="oc logs --selector name=sandbox-entity-operator"
+alias sco="k logs --selector name=strimzi-cluster-operator"
+alias seo="k logs --selector name=sandbox-entity-operator"
 
