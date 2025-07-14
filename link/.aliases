@@ -80,6 +80,9 @@ function displaytime {
 # END Worktime calculation
 # ------------------------------------------
 
+jwtdecode() {
+     jq -R 'split(".") | .[1] | @base64d | fromjson' <<< "$@"
+}
 
 docker_repo_list() {
      curl -s --insecure -X GET https://${DOCKER_REPO_URL}/v2/$@/tags/list
@@ -103,6 +106,7 @@ alias cp="cp -v"
 alias mv="mv -v"
 alias rm="rm -v"
 alias ws="cd ~/work"
+alias kvirt="cd ~/work/docs/kubevirt"
 alias home="cd ~"
 alias calc='echo PerlCalc; perl -ple"\$_=eval"'
 alias diff="diff -u $*"
@@ -193,6 +197,7 @@ alias ksecdec='echo kubectl get secret <secret> -o jsonpath="{<ex: .data.admin-p
 alias krr="kubectl rollout restart $1 $2"
 alias kge="kubectl get events"
 alias mdl='markdownlint-cli2 "**/*.md" "#node_modules"'
+alias vctl='virtctl'
 
 # Current branch or SHA if detached.
 alias gbs='git branch | perl -ne '"'"'/^\* (?:\(detached from (.*)\)|(.*))/ && print "$1$2"'"'"''

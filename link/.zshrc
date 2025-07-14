@@ -130,4 +130,4 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 alias j!=jbang
 export M2_HOME=/opt/maven
 export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
-export PATH="$HOME/.jbang/bin:${HOME}/bin:${M2_HOME}/bin:$PATH"
+export PATH="$HOME/.jbang/bin:${HOME}/bin:${M2_HOME}/bin:${HOME}/go/bin:/opt/oc:$PATH"
